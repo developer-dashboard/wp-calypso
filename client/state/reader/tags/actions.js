@@ -8,24 +8,12 @@ import trim from 'lodash/trim';
  */
 import wpcom from 'lib/wp';
 import {
-	READER_TAGS_RECEIVE,
-	READER_TAGS_REQUEST,
-	READER_TAGS_REQUEST_SUCCESS,
-	READER_TAGS_REQUEST_FAILURE
+	READER_FETCH_TAG_REQUEST,
+	READER_FETCH_TAGS_REQUEST,
+	READER_FOLLOW_TAG_REQUEST,
+	READER_UNFOLLOW_TAG_REQUEST,
 } from 'state/action-types';
-
-/**
- * Returns an action object to signal that tag objects have been received.
- *
- * @param  {Array}  tags Tags received
- * @return {Object}       Action object
- */
-export function receiveTags( tags ) {
-	return {
-		type: READER_TAGS_RECEIVE,
-		tags
-	};
-}
+import { createActionThunk } from 'state/utils';
 
 /**
  * Helper function. Turns a tag name into a tag "slug" for use with the API.
@@ -33,11 +21,47 @@ export function receiveTags( tags ) {
  * @param  {String} tag  Tag name to parse into a slug
  * @return {String}      Tag slug
  */
-export function slugify( tag ) {
-  return encodeURIComponent(
-    trim( tag )
-      .toLowerCase()
-      .replace( /\s+/g, '-' )
-      .replace( /-{2,}/g, '-' )
-  );
-}
+const slugify = ( tag ) => encodeURIComponent(
+	trim( tag )
+		.toLowerCase()
+		.replace( /\s+/g, '-' )
+		.replace( /-{2,}/g, '-' )
+);
+
+export const requestTags = () => createActionThunk( {
+	requestAction: READER_FETCH_TAGS_REQUEST,
+	dataFetch: () => wpcom.undocumented().readTags(),
+} );
+
+export const requestTag = ( tag ) => {
+	const slug = slugify( tag );
+
+	return createActionThunk( {
+		requestAction: READER_FETCH_TAG_REQUEST,
+		dataFetch: () => wpcom.undocumented().readTag( slug ),
+		meta: { tag, slug },
+	} );
+};
+
+export const requestUnfollowTag = ( tag ) => {
+	const slug = slugify( tag );
+
+	return createActionThunk( {
+		requestAction: READER_UNFOLLOW_TAG_REQUEST,
+		dataFetch: () => wpcom.undocumented().unfollowReaderTag( slug ),
+		meta: { tag, slug },
+	} );
+};
+
+export const requestFollowTag = ( tag ) => {
+	const slug = slugify( tag );
+
+	return createActionThunk( {
+		requestAction: READER_FOLLOW_TAG_REQUEST,
+		dataFetch: () => wpcom.undocumented().followReaderTag( slug ),
+		meta: { tag, slug },
+	} );
+};
+
+
+
