@@ -14,6 +14,7 @@ var tags = {};
 
 var TagStore = {
 	get( slug ) {
+		console.error( tags );
 		return tags[ slug ];
 	}
 };
