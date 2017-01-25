@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
  * Internal dependencies
  */
 import images from './images/reducer';
-import subscriptions from './subscriptions';
+import items from './items';
 
 /**
  * Returns errors received when trying to update tags, keyed by tag ID.
@@ -41,5 +41,5 @@ export function errors( state = {}, action ) {
 
 export default combineReducers( {
 	images,
-	subscriptions,
+	items,
 } );
