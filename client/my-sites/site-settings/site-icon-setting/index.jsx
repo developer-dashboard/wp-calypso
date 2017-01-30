@@ -111,7 +111,7 @@ class SiteIconSetting extends Component {
 			if ( media ) {
 				this.saveSiteIconSetting( siteId, media );
 			} else {
-				this.props.errorNotice( translate( 'An error occurred while uploading the file' ) );
+				this.props.errorNotice( translate( 'An error occurred while uploading the file.' ) );
 			}
 		};
 
