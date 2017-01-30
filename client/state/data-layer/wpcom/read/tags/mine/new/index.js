@@ -7,7 +7,7 @@ import {
 } from 'state/action-types';
 import wpcom from 'lib/wp';
 
-export function handleUnfollowRequest( store, action, next ) {
+export function handleUnfollowTagRequest( store, action, next ) {
 	wpcom.req.post( `/read/tags/${ action.payload.slug }/mine/delete`, { apiVersion: '1.2' } )
 		.then(
 			payload => {
@@ -28,6 +28,6 @@ export function handleUnfollowRequest( store, action, next ) {
 }
 
 export default {
-	[ READER_UNFOLLOW_TAG_REQUEST ]: [ handleUnfollowRequest ]
+	[ READER_UNFOLLOW_TAG_REQUEST ]: [ handleUnfollowTagRequest ]
 };
 

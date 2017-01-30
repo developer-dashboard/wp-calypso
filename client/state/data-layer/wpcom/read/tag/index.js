@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { READER_FETCH_TAG_REQUEST, READER_FETCH_TAG_RECEIVE} from 'state/action-types';
+import { READER_FETCH_TAG_REQUEST, READER_FETCH_TAG_RECEIVE } from 'state/action-types';
 import wpcom from 'lib/wp';
 
 export function handleTagRequest( store, action, next ) {

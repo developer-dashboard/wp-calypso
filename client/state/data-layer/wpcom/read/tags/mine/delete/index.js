@@ -7,7 +7,7 @@ import {
 } from 'state/action-types';
 import wpcom from 'lib/wp';
 
-export function handleFollowRequest( store, action, next ) {
+export function handleFollowTagRequest( store, action, next ) {
 	wpcom.req.post( `/read/tags/${ action.payload.slug }/mine/new`, { apiVersion: '1.2' } )
 		.then(
 			payload => {
@@ -28,6 +28,6 @@ export function handleFollowRequest( store, action, next ) {
 }
 
 export default {
-	[ READER_FOLLOW_TAG_REQUEST ]: [ handleFollowRequest() ]
+	[ READER_FOLLOW_TAG_REQUEST ]: [ handleFollowTagRequest() ]
 };
 
