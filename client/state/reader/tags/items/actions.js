@@ -6,7 +6,6 @@ import { memoize, trim } from 'lodash';
 /**
  * Internal dependencies
  */
-import wpcom from 'lib/wp';
 import {
 	READER_FETCH_TAG_REQUEST,
 	READER_FETCH_TAG_RECEIVE,
@@ -33,56 +32,48 @@ const unmemoizedSlugify = ( tag ) => encodeURIComponent(
 
 export const slugify = memoize( unmemoizedSlugify, x => x );
 
-const createRequestAction = ( { requestType, payload, requestKey } ) => {
-	return {
-		type: requestType,
-		payload,
-		meta: {
-			requestStart: `${ requestType }:${ requestKey }`
-		}
-	};
-};
-
-const createReceiveAction = ( { receiveType, requestType, requestKey, payload, error } ) => {
-	return {
-		type: receiveType,
-		payload,
-		error: !! error,
-		meta: {
-			requestEnd: `${ requestType }:${ requestKey }`
-		}
-	};
-};
-
 //dataFetch: () => wpcom.undocumented().readTags(),
-export const requestTags = () => createRequestAction( {
-	requestType: READER_FETCH_TAGS_REQUEST,
-} );
-export const receiveTags = ( { payload, error } ) =>
-	createReceiveAction( READER_FETCH_TAGS_RECEIVE )( {
-		requestType: READER_FETCH_TAGS_REQUEST,
-		receiveType: READER_FETCH_TAGS_RECEIVE,
-		error,
-		payload,
-	} );
+export const requestTags = () => ( { type: READER_FETCH_TAGS_REQUEST } );
+export const receiveTags = () => ( { type: READER_FETCH_TAGS_RECEIVE } );
 
 // dataFetch: () => wpcom.undocumented().readTag( slug ),
-export const requestTag = tag => createRequestAction( {
-	requestType: READER_FETCH_TAG_REQUEST,
-	requestKey: tag,
+export const requestTag = ( tag ) => ( {
+	type: READER_FETCH_TAG_REQUEST,
+	payload: {
+		tag
+	},
 } );
-export const receiveTag = ( { tag, payload, error } ) => createReceiveAction( {
-	receiveTag: READER_FETCH_TAGS_RECEIVE,
-	requestTag: READER_FETCH_TAG_REQUEST,
-	requestKey: tag,
+
+export const receiveTag = ( { payload, error } ) => ( {
+	type: READER_FETCH_TAG_RECEIVE,
 	payload,
 	error,
 } );
 
 // dataFetch: () => wpcom.undocumented().unfollowReaderTag( slug ),
-export const requestUnfollowTag = createRequestAction( READER_UNFOLLOW_TAG_REQUEST );
-export const receiveUnfollowTag = createRequestAction( READER_UNFOLLOW_TAG_RECEIVE );
+export const requestUnfollowTag = ( tag ) => ( {
+	type: READER_UNFOLLOW_TAG_REQUEST,
+	payload: {
+		tag
+	},
+} );
+
+export const receiveUnfollowTag = ( { payload, error } ) => ( {
+	type: READER_UNFOLLOW_TAG_RECEIVE,
+	payload,
+	error,
+} );
 
 // dataFetch: () => wpcom.undocumented().followReaderTag( slug ),
-export const requestFollowTag = createRequestAction( READER_FOLLOW_TAG_REQUEST );
-export const receiveFollowTag = createRequestAction( READER_FOLLOW_TAG_RECEIVE );
+export const requestFollowTag = ( tag ) => ( {
+	type: READER_FOLLOW_TAG_REQUEST,
+	payload: {
+		tag,
+	}
+} );
+
+export const receiveFollowTag = ( { payload, error } ) => ( {
+	type: READER_FOLLOW_TAG_RECEIVE,
+	payload,
+	error,
+} );

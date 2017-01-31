@@ -1,33 +1,22 @@
 /**
  * Internal dependencies
  */
-import {
-	READER_FOLLOW_TAG_REQUEST,
-	READER_FOLLOW_TAG_RECEIVE,
-} from 'state/action-types';
+import { READER_UNFOLLOW_TAG_REQUEST } from 'state/action-types';
+import { receiveUnfollowTag, } from 'client/state/reader/tags/actions';
+
 import wpcom from 'lib/wp';
 
-export function handleFollowTagRequest( store, action, next ) {
-	wpcom.req.post( `/read/tags/${ action.payload.slug }/mine/new`, { apiVersion: '1.2' } )
+export function handleUnfollowTagRequest( store, action, next ) {
+	wpcom.req.post( `/read/tags/${ action.payload.slug }/mine/delete`, { apiVersion: '1.2' } )
 		.then(
-			payload => {
-				store.dispatch( {
-					type: READER_FOLLOW_TAG_RECEIVE,
-					payload,
-				} );
-			},
-			error => {
-				store.dispatch( {
-					type: READER_FOLLOW_TAG_RECEIVE,
-					payload: error,
-					error: true,
-				} );
-			}
+			payload => store.dispatch( receiveUnfollowTag( { payload } ) ),
+			error => store.dispatch( receiveUnfollowTag( { payload: error, error: true } ) ),
 		);
+
 	next( action );
 }
 
 export default {
-	[ READER_FOLLOW_TAG_REQUEST ]: [ handleFollowTagRequest() ]
+	[ READER_UNFOLLOW_TAG_REQUEST ]: [ handleUnfollowTagRequest ]
 };
 
